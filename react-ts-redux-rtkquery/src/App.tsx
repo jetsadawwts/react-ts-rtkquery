@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-import { useGetContactsByIdQuery, useGetContactsQuery } from './services/api'
+import { useAddContactsMutation, useDeleteContactsMutation, useGetContactsByIdQuery, useGetContactsQuery, useUpdateContactsMutation } from './services/api'
 
 function App() {
   const { data, error, isLoading, isFetching, isSuccess } = useGetContactsQuery();
@@ -21,6 +21,7 @@ function App() {
           })}
         </div>
       )}
+      <AddContact />
     </div>
   )
 }
@@ -33,6 +34,51 @@ export const ContactDetail = ({ id }: { id: string }) => {
       {JSON.stringify(data, undefined, 2)}
     </pre>
   )
+}
+
+export const AddContact = () => {
+  const [addContact] = useAddContactsMutation();
+  const [updateContact] = useUpdateContactsMutation();
+  const [deleteContact] = useDeleteContactsMutation();
+  // Manual fetch api
+  // const { refetch } = useGetContactsQuery();
+  const contact = {
+    "id": "6",
+    "name": "Pon",
+    "email": "Pon@gmail.com"
+  }
+
+  const contactUpdate = {
+    "id": "6",
+    "name": "Aof",
+    "email": "Aof@gmail.com"
+  }
+
+
+  const addHandler = async () => {
+    await addContact(contact);
+    // refetch()
+  }
+
+  const updateHandler = async () => {
+    await updateContact(contactUpdate);
+    // refetch()
+  }
+
+  const deleteHandler = async () => {
+    await deleteContact(contact.id);
+    // refetch()
+  }
+
+  return (
+    <>
+      <button onClick={addHandler}>Add contact</button>
+      <button onClick={updateHandler}>Update contact</button>
+      <button onClick={deleteHandler}>Delete contact</button>
+    </>
+  )
+
+
 }
 
 export default App
